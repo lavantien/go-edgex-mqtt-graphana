@@ -21,8 +21,8 @@ An EdgeX Docker based Edge microservices mesh system, with fake sensors, pure Go
 
 ## Requirements not cover in this setup
 
-1. `Ubuntu 20.04 LTS` or `Windows 10` & `WSL2`
-2. `Docker` & `docker-compose` installed, in `Windows 10` it will all included in `Docker Desktop`
+1. `Ubuntu 22.04 LTS` or `Windows 11` & `WSL2`
+2. `Docker` & `docker-compose` installed, in `Windows 11` it will all included in `Docker Desktop`
 3. `Postman`, `Insomnia` or `CURL+jq` installed
 4. `Go 1.16+` installed, `1.16+` for the `embed` feature
 
