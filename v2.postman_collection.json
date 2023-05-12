@@ -1,0 +1,321 @@
+{
+	"info": {
+		"_postman_id": "caafd417-aef1-4676-80c3-b3f5e0459493",
+		"name": "v2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ping core-data",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:59880/api/v2/ping",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "59880",
+					"path": ["api", "v2", "ping"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ping gateway core-data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/core-data/api/v2/ping",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["core-data", "api", "v2", "ping"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ping gateway core-metadata",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/core-metadata/api/v2/ping",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["core-metadata", "api", "v2", "ping"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ping gateway device-rest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/device-rest/api/v2/ping",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["device-rest", "api", "v2", "ping"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ping gateway rules-engine",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/rules-engine/ping",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["rules-engine", "ping"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway uploadfile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/savaka/go/src/bitbucket.org/tienla-monsterpixel/sample-edgex/go_api/admin/sensorClusterDeviceProfile.yaml"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/core-metadata/api/v2/deviceprofile/uploadfile",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["core-metadata", "api", "v2", "deviceprofile", "uploadfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway create device",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"apiVersion\": \"v2\",\n        \"device\": {\n            \"name\": \"Temp_and_Humidity_sensor_cluster_01\",\n            \"description\": \"Raspberry Pi sensor cluster\",\n            \"adminState\": \"UNLOCKED\",\n            \"operatingState\": \"UP\",\n            \"labels\": [\n                \"Humidity sensor\",\n                \"Temperature sensor\",\n                \"DHT11\"\n            ],\n            \"location\": \"{lat:45.45,long:47.80}\",\n            \"serviceName\": \"device-rest\",\n            \"profileName\": \"SensorCluster\",\n            \"protocols\": {\n                \"example\": {\n                    \"host\": \"dummy\",\n                    \"port\": \"1234\",\n                    \"unitID\": \"1\"\n                }\n            }\n        }\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/core-metadata/api/v2/device",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["core-metadata", "api", "v2", "device"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway streams",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sql\": \"create stream MQTT_TOPIC() WITH (FORMAT=\\\"JSON\\\", TYPE=\\\"edgex\\\")\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/rules-engine/streams",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["rules-engine", "streams"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway rules",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"mqtt_export_rule\",\n    \"sql\": \"SELECT * FROM MQTT_TOPIC\",\n    \"actions\": [\n        {\n            \"mqtt\": {\n                \"server\": \"tcp://mosquitto:1883\",\n                \"topic\": \"MQTT_TOPIC\",\n                \"username\": \"someuser\",\n                \"password\": \"somepassword\",\n                \"clientId\": \"someclientid\"\n            }\n        },\n        {\n            \"log\": {}\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/rules-engine/rules",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["rules-engine", "rules"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway send temperature",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"apiVersion\": \"v2\",\n    \"event\": {\n        \"apiVersion\": \"v2\",\n        \"id\": \"{{$randomUUID}}\",\n        \"deviceName\": \"Temp_and_Humidity_sensor_cluster_01\",\n        \"profileName\": \"SensorCluster\",\n        \"sourceName\": \"temperature\",\n        \"origin\": 1631685621809761924,\n        \"readings\": [\n            {\n                \"id\": \"{{$randomUUID}}\",\n                \"origin\": 1631685621809761924,\n                \"deviceName\": \"Temp_and_Humidity_sensor_cluster_01\",\n                \"resourceName\": \"temperature\",\n                \"profileName\": \"SensorCluster\",\n                \"valueType\": \"Int64\",\n                \"value\": \"80\"\n            }\n        ],\n        \"tags\": {\n            \"Gateway\": \"HoustonStore-000123\",\n            \"Latitude\": \"45.450000\",\n            \"Longitude\": \"47.800000\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/core-data/api/v2/event/SensorCluster/Temp_and_Humidity_sensor_cluster_01/temperature",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": [
+						"core-data",
+						"api",
+						"v2",
+						"event",
+						"SensorCluster",
+						"Temp_and_Humidity_sensor_cluster_01",
+						"temperature"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway send humiidty",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"apiVersion\": \"v2\",\n    \"event\": {\n        \"apiVersion\": \"v2\",\n        \"id\": \"{{$randomUUID}}\",\n        \"deviceName\": \"Temp_and_Humidity_sensor_cluster_01\",\n        \"profileName\": \"SensorCluster\",\n        \"sourceName\": \"humidity\",\n        \"origin\": 1631685621813990772,\n        \"readings\": [\n            {\n                \"id\": \"{{$randomUUID}}\",\n                \"origin\": 1631685621813990772,\n                \"deviceName\": \"Temp_and_Humidity_sensor_cluster_01\",\n                \"resourceName\": \"humidity\",\n                \"profileName\": \"SensorCluster\",\n                \"valueType\": \"Int64\",\n                \"value\": \"100\"\n            }\n        ],\n        \"tags\": {\n            \"Gateway\": \"HoustonStore-000123\",\n            \"Latitude\": \"45.450000\",\n            \"Longitude\": \"47.800000\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/core-data/api/v2/event/SensorCluster/Temp_and_Humidity_sensor_cluster_01/humidity",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": [
+						"core-data",
+						"api",
+						"v2",
+						"event",
+						"SensorCluster",
+						"Temp_and_Humidity_sensor_cluster_01",
+						"humidity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway get all events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/core-data/api/v2/event/all?limit=-1",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["core-data", "api", "v2", "event", "all"],
+					"query": [
+						{
+							"key": "limit",
+							"value": "-1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateway count events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/core-data/api/v2/event/count",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["core-data", "api", "v2", "event", "count"]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [""]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [""]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt",
+			"value": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzE2ODY1ODcsImlhdCI6MTYzMTY4Mjk4NywiaXNzIjoiMmNkYmU3ZWMtYWE3NC00YzkyLTlhNWYtNjk5Nzg3OTc3Njk5IiwibmJmIjoxNjMxNjgyOTg3fQ.WWIyYGmgQHngy1vis312ZzJtRVvVbv_R-Uoot2mWgnYySJWj1z9uZ4gsOjcl4HAT-sxjbOKDcDXtVTSLS5jryQ"
+		},
+		{
+			"key": "wsl-ip",
+			"value": "172.26.0.111",
+			"disabled": true
+		}
+	]
+}

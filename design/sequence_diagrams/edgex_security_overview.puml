@@ -1,0 +1,42 @@
+@startuml
+
+!theme sketchy-outline
+title EdgeX Security
+header snap-v2
+footer Page %page% of %lastpage%
+'skinparam BackgroundColor transparent
+skinparam responseMessageBelowArrow true
+autonumber "<b>[000]"
+
+box "Inbound"
+participant sensor
+participant kong
+participant vault
+end box
+
+box "Internal"
+participant device
+participant streams
+participant rules
+queue mosquitto
+end box
+
+box "Outbound"
+participant telegraf
+database influxdb
+participant graphana
+end box
+
+sensor -> kong
+kong -> vault
+vault -> device
+
+device <-> streams
+streams <-> rules
+rules -> mosquitto : MQTT_TOPIC
+
+mosquitto <- telegraf : MQTT_TOPIC
+telegraf -> influxdb : mqtt_consumer
+influxdb <- graphana: mqtt_consumer
+
+@enduml

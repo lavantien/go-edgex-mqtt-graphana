@@ -1,0 +1,13 @@
+# Pre-define Devices
+[[DeviceList]]
+  Name = "my-custom-device"
+  ProfileName = "my-custom-device-profile"
+  Description = "MQTT device is created for test purpose"
+  Labels = [ "MQTT", "test" ]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.mqtt]
+       CommandTopic = "CommandTopic"
+    [[DeviceList.AutoEvents]]
+       Interval = "30s"
+       OnChange = false
+       SourceName = "message"

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+        <meta http-equiv="refresh" content="{{ .Interval }}" />
+		<title>{{ .Title }}</title>
+		<!-- datatables -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="//cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+		<link rel="stylesheet" href="//cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" />
+		<!-- bootstrap -->
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+			crossorigin="anonymous"
+		/>
+		<!-- <script
+			src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"
+		></script> -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+			crossorigin="anonymous"
+		></script>
+        <!-- chart.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+        <!-- global style -->
+        <style>
+        </style>
+	</head>
+	<body>
+		<div class="container-fluid text-center">
+			<div class="row">
+				<div class="col-sm">
+					<h1>{{ .Title }}</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+                    <div><h3>Raw Data</h3></div>
+					<table id="raw-data-table" class="table table-sm table-striped table-bordered">
+						<thead>
+							<th>No.</th>
+							<th>Time</th>
+							<th>Device</th>
+							<th>Temperature</th>
+							<th>Humidity</th>
+						</thead>
+						<tbody>
+							{{ range $i, $v := .Data }}
+							<tr>
+								<td>{{ $i }}</td>
+								<td>{{ $v.Time }}</td>
+								<td>{{ $v.Device }}</td>
+								<td>{{ $v.Temperature }}</td>
+								<td>{{ $v.Humidity }}</td>
+							</tr>
+							{{
+								end
+							}}
+						</tbody>
+					</table>
+				</div>
+                <div class="col-6">
+                    <div><h3>Transformed Data</h3></div>
+					<table id="transformed-data-table" class="table table-sm table-striped table-bordered">
+						<thead>
+							<th>No.</th>
+							<th>Time</th>
+							<th>Device</th>
+							<th>Temperature</th>
+							<th>Humidity</th>
+						</thead>
+						<tbody>
+							{{ range $i, $v := .Data }}
+							<tr>
+								<td>{{ $i }}</td>
+								<td>{{ $v.Time }}</td>
+								<td>{{ $v.Device }}</td>
+								<td>{{ $v.Temperature }}</td>
+								<td>{{ $v.Humidity }}</td>
+							</tr>
+							{{
+								end
+							}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+            <div class="row justify-content-center mt-4">
+                <h3>Posted Data from Third-party {{ .Provider }}</h3>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <table id="thirdparty-data-table" class="table table-sm table-striped table-bordered">
+                        <thead>
+                            <th>No.</th>
+                            <th>Temperature</th>
+                            <th>Humidity</th>
+                        </thead>
+                        <tbody>
+                            {{ range $i, $v := .Posted }}
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $v.Temperature }}</td>
+                                <td>{{ $v.Humidity }}</td>
+                            </tr>
+                            {{
+                                end
+                            }}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-6 p-1">
+                    <canvas id="vendor-chart" width="930.5px" height="347px"></canvas>
+                </div>
+            </div>
+		</div>
+		<script>
+			$(document).ready(function () {
+                var defaultTableConfig = {
+                    pageLength: 5
+                };
+				$("#raw-data-table").DataTable(defaultTableConfig);
+                $("#transformed-data-table").DataTable(defaultTableConfig);
+                $("#thirdparty-data-table").DataTable(defaultTableConfig);
+			});
+
+            var readings = {{ .Posted }}
+            var data = {{ .Data }}
+            var times = data.map(x => x.time)
+            var temperatureData = readings.map(x => x.temperature)
+            var humidityData = readings.map(x => x.humidity)
+
+            var vendorChart = new Chart("vendor-chart", {
+                type: "line",
+                data: {
+                    labels: times,
+                    datasets: [{
+                        data: temperatureData,
+                        label: 'temperature',
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    },{
+                        data: humidityData,
+                        label: 'humidity',
+                        fill: false,
+                        borderColor: 'rgb(192, 192, 75)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: false
+                }
+            });
+		</script>
+	</body>
+</html>

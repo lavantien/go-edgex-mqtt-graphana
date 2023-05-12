@@ -1,0 +1,7 @@
+@startuml graphana_intergration
+SensorSimulation -> EdgeX : HTTP send temperature, humidity
+EdgeX -> MQTTBroker : Kuiper JSON rule contains MQTT_TOPIC
+Telegraf -> MQTTBroker : GET JSON data from MQTT_TOPIC
+Telegraf -> InfluxDB : SAVE temperature, humidity to mqtt_consumer measurement
+Graphana -> InfluxDB : QUERY source
+@enduml

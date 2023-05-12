@@ -1,0 +1,34 @@
+name: "SensorCluster"
+manufacturer: "Raspberry Pi Foundation"
+model: "Raspberry Pi 3b+"
+labels:
+  - "rpi"
+description: "Sensor cluster providing metrics for temperature and humidity"
+
+deviceResources:
+  - 
+    name: temperature
+    description: "Sensor cluster temperature values"
+    properties:
+      valueType: "Int64"
+      readWrite: "RW"
+      minimum: "-50"
+      maximum: "100"
+      defaultValue: "9"
+  - 
+    name: humidity
+    description: "Sensor cluster humidity values"
+    properties:
+      valueType: "Int64"
+      readWrite: "RW"
+      minimum: "0"
+      maximum: "100"
+      defaultValue: "9"
+
+deviceCommands:
+  -
+    name: combine
+    readWrite: "RW"
+    resourceOperations:
+      - { deviceResource: "temperature" }
+      - { deviceResource: "humidity" }

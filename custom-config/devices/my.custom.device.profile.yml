@@ -1,0 +1,35 @@
+name: "my-custom-device-profile"
+manufacturer: "iot"
+model: "MQTT-DEVICE"
+description: "Test device profile"
+labels:
+  - "mqtt"
+  - "test"
+deviceResources:
+  - name: randnum
+    isHidden: true
+    description: "device random number"
+    properties:
+      valueType: "Float32"
+      readWrite: "R"
+  - name: ping
+    isHidden: true
+    description: "device awake"
+    properties:
+      valueType: "String"
+      readWrite: "R"
+  - name: message
+    isHidden: false
+    description: "device message"
+    properties:
+      valueType: "String"
+      readWrite: "RW"
+
+deviceCommands:
+  - name: values
+    readWrite: "R"
+    isHidden: false
+    resourceOperations:
+      - { deviceResource: "randnum" }
+      - { deviceResource: "ping" }
+      - { deviceResource: "message" }

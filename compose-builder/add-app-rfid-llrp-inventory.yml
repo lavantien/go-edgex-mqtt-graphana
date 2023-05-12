@@ -1,0 +1,37 @@
+# /*******************************************************************************
+#  * Copyright 2021 Intel Corporation.
+#  *
+#  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+#  * in compliance with the License. You may obtain a copy of the License at
+#  *
+#  * http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  * Unless required by applicable law or agreed to in writing, software distributed under the License
+#  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+#  * or implied. See the License for the specific language governing permissions and limitations under
+#  * the License.
+#  *
+#  *******************************************************************************/
+
+version: "3.7"
+
+services:
+  app-rfid-llrp-inventory:
+    image: ${APP_SVC_REPOSITORY}/app-rfid-llrp-inventory${ARCH}:${APP_LLRP_VERSION}
+    ports:
+      - 127.0.0.1:59711:59711/tcp
+    container_name: edgex-app-rfid-llrp-inventory
+    hostname: edgex-app-rfid-llrp-inventory
+    env_file:
+      - common.env
+    environment:
+      SERVICE_HOST: edgex-app-rfid-llrp-inventory
+    depends_on:
+      - consul
+      - data
+    read_only: true
+    networks:
+      - edgex-network
+    security_opt:
+      - no-new-privileges:true
+    user: "${EDGEX_USER}:${EDGEX_GROUP}"
